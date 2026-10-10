@@ -8,6 +8,9 @@ const MIME_TYPES = {
   '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
   '.json': 'application/json',
+  '.webmanifest': 'application/manifest+json',
+  '.xml': 'application/xml; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -20,25 +23,45 @@ const server = http.createServer((req, res) => {
   let safePath = path.normalize(decodeURI(req.url.split('?')[0])).replace(/^(\.\.[\/\\])+/, '');
   if (safePath === '/' || safePath === '\\') safePath = '/index.html';
   
-  const filePath = path.join(__dirname, safePath);
+  let filePath = path.join(__dirname, safePath);
   
   fs.stat(filePath, (err, stats) => {
+    // If not found, try appending .html for clean URLs
     if (err || !stats.isFile()) {
+      if (!path.extname(filePath)) {
+        const htmlPath = filePath + '.html';
+        if (fs.existsSync(htmlPath)) {
+          filePath = htmlPath;
+          return serveFile(filePath, res);
+        }
+      }
+      
+      // Serve custom 404 page if exists
+      const custom404 = path.join(__dirname, '404.html');
+      if (fs.existsSync(custom404)) {
+        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+        return fs.createReadStream(custom404).pipe(res);
+      }
+
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       return res.end('404 Not Found');
     }
 
-    const ext = path.extname(filePath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-
-    res.writeHead(200, {
-      'Content-Type': contentType,
-      'Cache-Control': 'no-cache'
-    });
-
-    fs.createReadStream(filePath).pipe(res);
+    serveFile(filePath, res);
   });
 });
+
+function serveFile(filePath, res) {
+  const ext = path.extname(filePath).toLowerCase();
+  const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+
+  res.writeHead(200, {
+    'Content-Type': contentType,
+    'Cache-Control': ext.match(/\.(png|jpg|jpeg|svg|webp|ico)$/) ? 'public, max-age=86400' : 'no-cache'
+  });
+
+  fs.createReadStream(filePath).pipe(res);
+}
 
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`Parichay Production server listening at http://127.0.0.1:${PORT}`);

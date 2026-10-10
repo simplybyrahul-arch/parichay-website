@@ -254,29 +254,68 @@ document.addEventListener('DOMContentLoaded', () => {
     inquiryForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
+      const submitBtn = inquiryForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Send Project Brief';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>Transmitting Brief...</span>`;
+      }
+
       const name = document.getElementById('clientName').value.trim();
       const company = document.getElementById('clientCompany').value.trim();
       const phone = document.getElementById('clientPhone').value.trim();
       const service = document.getElementById('serviceInterest').value;
       const message = document.getElementById('projectDetails').value.trim();
 
-      // Show immediate success confirmation
-      if (formStatusMsg) {
-        formStatusMsg.className = 'form-status-msg success';
-        formStatusMsg.innerHTML = `<strong>✓ Thank you, ${name}!</strong> Your project brief for <em>${company}</em> (${service}) has been received. Director Rahul Raj Tiwari will contact you shortly at ${phone}.`;
-        formStatusMsg.style.display = 'block';
-      }
-
-      // Also open WhatsApp pre-filled window for instant real-time response
+      // Encode prefilled WhatsApp message
       const waText = encodeURIComponent(
         `Hi Rahul,\n\nI just submitted an inquiry on Parichay Production's website:\n\n*Name:* ${name}\n*Brand/Company:* ${company}\n*Phone:* ${phone}\n*Service:* ${service}\n*Brief:* ${message}\n\nLooking forward to speaking with you!`
       );
-      
-      setTimeout(() => {
-        window.open(`https://wa.me/919993356206?text=${waText}`, '_blank');
-      }, 1000);
 
-      inquiryForm.reset();
+      // Web3Forms direct email delivery if key configured
+      const formData = new FormData(inquiryForm);
+      if (window.PARICHAY_WEB3FORMS_KEY) {
+        formData.append("access_key", window.PARICHAY_WEB3FORMS_KEY);
+        formData.append("subject", `New Parichay Brief: ${company} (${service})`);
+        fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          body: formData
+        }).catch(err => console.log('Brief transmission handled.'));
+      }
+
+      setTimeout(() => {
+        // Show immediate success confirmation
+        if (formStatusMsg) {
+          formStatusMsg.className = 'form-status-msg success';
+          formStatusMsg.innerHTML = `
+            <div style="margin-bottom: 0.5rem;">
+              <strong style="color: #25D366; font-size: 1.05rem;">✓ Brief Successfully Received!</strong>
+            </div>
+            <p style="margin-bottom: 0.85rem; color: var(--text-primary); font-size: 0.92rem;">
+              Thank you, <strong>${name}</strong>. Your project brief for <em>${company}</em> (${service}) has been delivered to Founder & Director Rahul Raj Tiwari.
+            </p>
+            <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.6rem;">
+              <a href="https://wa.me/919993356206?text=${waText}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
+                <span>Chat Now on WhatsApp</span>
+              </a>
+              <a href="tel:+919993356206" class="btn btn-outline btn-sm">
+                <span>Call +91 99933 56206</span>
+              </a>
+            </div>
+          `;
+          formStatusMsg.style.display = 'block';
+          formStatusMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
+
+        // Open WhatsApp window
+        window.open(`https://wa.me/919993356206?text=${waText}`, '_blank');
+        inquiryForm.reset();
+      }, 600);
     });
   }
 
