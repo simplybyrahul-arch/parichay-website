@@ -5,32 +5,33 @@
 
 /* --- 1. CSS VARIABLES & TOKENS --- */
 :root {
-  /* Color Palette */
-  --bg-primary: #0A0A0C;           /* Deep Obsidian Film Negative */
-  --bg-surface: #121217;           /* Elevated Stage Surface */
-  --bg-card: #181820;              /* Card Background */
-  --bg-card-hover: #20202B;        /* Hover Card State */
-  --bg-glass: rgba(18, 18, 23, 0.75); /* Frosted Glass */
+  /* Color Palette - Direction 2: Anamorphic Golden Hour (Warm 35mm Celluloid) */
+  --bg-primary: #0E0D0C;           /* Warm Espresso Film Negative */
+  --bg-surface: #161413;           /* Smoked Cedar Stage Surface */
+  --bg-card: #1D1B19;              /* Warm Obsidian Card */
+  --bg-card-hover: #262320;        /* Hover Warm Card State */
+  --bg-glass: rgba(22, 20, 19, 0.85); /* Frosted Warm Glass */
   
-  --accent-orange: #E25227;        /* Signature Parichay Vermilion */
-  --accent-orange-glow: rgba(226, 82, 39, 0.35);
-  --accent-amber: #F59E0B;         /* Tungsten Amber Glow */
-  --accent-amber-subtle: rgba(245, 158, 11, 0.12);
+  --accent-amber: #E09F3E;         /* 35mm Film Amber / Golden Hour Honey */
+  --accent-amber-glow: rgba(224, 159, 62, 0.35);
+  --accent-amber-subtle: rgba(224, 159, 62, 0.12);
+  --accent-orange: #E09F3E;        /* Warm Film Amber (mapped for complete backward compatibility) */
+  --accent-orange-glow: rgba(224, 159, 62, 0.35);
   
-  --text-primary: #F5F3EE;         /* Bone White / Warm Chalk */
-  --text-secondary: #C8C6CD;       /* Editorial Muted */
-  --text-muted: #8E8D98;           /* Timecode & Meta Gray */
-  --text-dark: #0A0A0C;
+  --text-primary: #F7F4EE;         /* Unbleached Silk / Warm Ivory */
+  --text-secondary: #C7C1B7;       /* Editorial Muted Taupe */
+  --text-muted: #8E877C;           /* Celluloid Timecode Gray */
+  --text-dark: #0E0D0C;
   
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-card: rgba(255, 255, 255, 0.12);
-  --border-highlight: rgba(226, 82, 39, 0.5);
+  --border-subtle: rgba(247, 244, 238, 0.08);
+  --border-card: rgba(247, 244, 238, 0.12);
+  --border-highlight: rgba(224, 159, 62, 0.45);
   
-  /* Typography */
-  --font-display: 'Syne', sans-serif;
-  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Typography - Direction 2: DM Serif Display + DM Sans */
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Space Mono', monospace;
-  --font-devanagari: 'Plus Jakarta Sans', 'Rozha One', serif;
+  --font-devanagari: 'Rozha One', 'DM Serif Display', serif;
   
   /* Layout & Spacing */
   --container-max: 1260px;
@@ -171,11 +172,11 @@ ul {
 
 .section-heading {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: 1rem;
+  font-size: clamp(2.3rem, 4.6vw, 4rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.1rem;
 }
 
 .section-sub {
@@ -613,10 +614,10 @@ ul {
 
 .page-hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vw, 4.2rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-size: clamp(2.6rem, 5.2vw, 4.3rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
   margin-bottom: 1rem;
 }
 
@@ -706,10 +707,10 @@ ul {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.8rem, 6.5vw, 5.2rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.025em;
+  font-size: clamp(3rem, 6.8vw, 5.4rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
   margin-bottom: 1.5rem;
 }
 
@@ -720,8 +721,8 @@ ul {
 
 .hero-highlight {
   display: block;
-  color: var(--accent-orange);
-  text-shadow: 0 0 40px rgba(226, 82, 39, 0.4);
+  color: var(--accent-amber);
+  text-shadow: 0 0 45px rgba(224, 159, 62, 0.45);
 }
 
 .hero-description {
@@ -813,7 +814,7 @@ ul {
 .metric-value {
   font-family: var(--font-display);
   font-size: 1.9rem;
-  font-weight: 800;
+  font-weight: 400;
   color: #FFFFFF;
   line-height: 1.1;
 }
@@ -1295,7 +1296,7 @@ ul {
 .metric-big {
   font-family: var(--font-display);
   font-size: 1.45rem;
-  font-weight: 800;
+  font-weight: 400;
   color: #FFFFFF;
   line-height: 1.1;
 }
@@ -1534,7 +1535,7 @@ ul {
 .wedding-heading {
   font-family: var(--font-display);
   font-size: clamp(2rem, 3.5vw, 2.8rem);
-  font-weight: 800;
+  font-weight: 400;
   line-height: 1.15;
   margin-bottom: 1.25rem;
 }
@@ -1727,7 +1728,7 @@ ul {
 .stat-number {
   font-family: var(--font-display);
   font-size: 3.5rem;
-  font-weight: 800;
+  font-weight: 400;
   color: var(--accent-orange);
   line-height: 1;
   margin-bottom: 0.6rem;
@@ -1886,7 +1887,7 @@ ul {
 .leader-initials {
   font-family: var(--font-display);
   font-size: 2.5rem;
-  font-weight: 800;
+  font-weight: 400;
   color: rgba(226, 82, 39, 0.4);
   line-height: 1;
   margin-bottom: 0.5rem;
@@ -1899,7 +1900,7 @@ ul {
   border: 1px solid rgba(226, 82, 39, 0.35);
   color: var(--accent-orange);
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 400;
   font-size: 1.1rem;
   display: flex;
   align-items: center;
@@ -2061,7 +2062,7 @@ ul {
 .cta-title {
   font-family: var(--font-display);
   font-size: clamp(2.2rem, 4vw, 3.2rem);
-  font-weight: 800;
+  font-weight: 400;
   line-height: 1.1;
   margin-bottom: 1.2rem;
 }
