@@ -65,24 +65,42 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileDrawer = document.getElementById('mobileDrawer');
   const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
+  // Backdrop element for drawer
+  let drawerBackdrop = document.querySelector('.mobile-drawer-backdrop');
+  if (!drawerBackdrop && mobileDrawer) {
+    drawerBackdrop = document.createElement('div');
+    drawerBackdrop.className = 'mobile-drawer-backdrop';
+    drawerBackdrop.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(drawerBackdrop);
+  }
+
   const openDrawer = () => {
+    if (!mobileDrawer) return;
     mobileDrawer.classList.add('open');
     mobileDrawer.setAttribute('aria-hidden', 'false');
-    menuToggle.setAttribute('aria-expanded', 'true');
+    if (menuToggle) menuToggle.setAttribute('aria-expanded', 'true');
+    if (drawerBackdrop) drawerBackdrop.classList.add('active');
     document.body.style.overflow = 'hidden';
   };
 
   const closeDrawer = () => {
+    if (!mobileDrawer) return;
     mobileDrawer.classList.remove('open');
     mobileDrawer.setAttribute('aria-hidden', 'true');
-    menuToggle.setAttribute('aria-expanded', 'false');
+    if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+    if (drawerBackdrop) drawerBackdrop.classList.remove('active');
     document.body.style.overflow = '';
   };
 
-  if (menuToggle && drawerClose) {
-    menuToggle.addEventListener('click', openDrawer);
-    drawerClose.addEventListener('click', closeDrawer);
-  }
+  if (menuToggle) menuToggle.addEventListener('click', openDrawer);
+  if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+  if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileDrawer && mobileDrawer.classList.contains('open')) {
+      closeDrawer();
+    }
+  });
 
   mobileNavLinks.forEach(link => {
     link.addEventListener('click', closeDrawer);
